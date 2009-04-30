@@ -24,6 +24,8 @@ public:
 private Q_SLOTS:
     void browseForAsi();
     void browseForP12();
+    void generateConfiguration();
+    void checkFields();
 
 private:
     Ui::MainWindow *ui;

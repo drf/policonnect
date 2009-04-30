@@ -71,7 +71,7 @@ p, li { white-space: pre-wrap; }
        </layout>
       </item>
       <item row="1" column="0">
-       <widget class="QRadioButton" name="generateAsiButton">
+       <widget class="QRadioButton" name="generateAsiRadio">
         <property name="text">
          <string>Genera asi.cer</string>
         </property>
@@ -223,7 +223,7 @@ p, li { white-space: pre-wrap; }
  <resources/>
  <connections>
   <connection>
-   <sender>generateAsiButton</sender>
+   <sender>generateAsiRadio</sender>
    <signal>toggled(bool)</signal>
    <receiver>label_5</receiver>
    <slot>setEnabled(bool)</slot>
@@ -239,7 +239,7 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>generateAsiButton</sender>
+   <sender>generateAsiRadio</sender>
    <signal>toggled(bool)</signal>
    <receiver>p12PasswordEdit</receiver>
    <slot>setEnabled(bool)</slot>
