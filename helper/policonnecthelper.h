@@ -29,12 +29,22 @@ class PoliconnectHelper : public QObject, protected QDBusContext
     Q_OBJECT
 
 public:
+
+    enum Error {
+        NoError = 0,
+        NotAuthorized = 1,
+        GenerateASIFail = 2
+    };
+
     PoliconnectHelper(QObject *parent = 0);
     virtual ~PoliconnectHelper();
 
 public Q_SLOTS:
     void generateConfiguration(const QString &p12, bool generate, const QString &p12Pass,
-                               const QString &asi, int matricola, const QString &password);
+                               const QString &asi, int matricola);
+
+Q_SIGNALS:
+    void operationResult(bool success, int error = 0);
 };
 
 #endif // POLICONNECTHELPER_H

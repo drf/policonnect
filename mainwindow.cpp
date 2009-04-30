@@ -75,8 +75,7 @@ void MainWindow::checkFields()
     if (ui->p12LocateEdit->text().isEmpty() ||
         (ui->locateAsiRadio->isChecked() && ui->locateAsiEdit->text().isEmpty()) ||
         (ui->generateAsiRadio->isChecked() && ui->p12PasswordEdit->text().isEmpty()) ||
-        ui->matricolaEdit->text().isEmpty() ||
-        ui->matrPasswordEdit->text().isEmpty()) {
+        ui->matricolaEdit->text().isEmpty()) {
         QMessageBox::warning(this, "Errore", "Devi inserire tutti i campi");
         return;
     }
@@ -100,6 +99,5 @@ void MainWindow::generateConfiguration()
                          "it.polimi.policonnectworker",
                          QDBusConnection::systemBus());
     iface.asyncCall("generateConfiguration", ui->p12LocateEdit->text(), ui->locateAsiRadio->isChecked(),
-                    ui->p12PasswordEdit->text(), ui->locateAsiEdit->text(), ui->matricolaEdit->text(),
-                    ui->matrPasswordEdit->text());
+                    ui->p12PasswordEdit->text(), ui->locateAsiEdit->text(), ui->matricolaEdit->text());
 }

@@ -7,7 +7,6 @@
 	   <arg direction="in" type="s" name="p12pass" />
 	   <arg direction="in" type="s" name="asilocate" />
 	   <arg direction="in" type="i" name="matricola" />
-	   <arg direction="in" type="s" name="password" />
        </method>
    </interface>
 </node>

@@ -27,6 +27,9 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QTimer>
+#include <QProcess>
+#include <QDir>
+#include <QFile>
 
 PoliconnectHelper::PoliconnectHelper(QObject *parent)
         : QObject(parent)
@@ -54,7 +57,7 @@ PoliconnectHelper::~PoliconnectHelper()
 }
 
 void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate, const QString &p12Pass,
-                                              const QString &asi, int matricola, const QString &password)
+                                              const QString &asi, int matricola)
 {
     PolkitQt::Auth::Result result;
     result = PolkitQt::Auth::isCallerAuthorized("it.polimi.policonnect.GenerateConfiguration",
@@ -62,7 +65,63 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
                                                 true);
     if (result != PolkitQt::Auth::Yes) {
         // We were not authorized. Let's quit out and stream the error
+        emit operationResult(false, (int)NotAuthorized);
         QCoreApplication::instance()->quit();
         return;
     }
+
+    const QString path = "/usr/share/policonnect";
+
+    // Let's start by creating our /usr/share/policonnect dir
+    QDir().mkpath(path);
+
+    // Now copy over the certificate
+    if (!QFile::copy(p12, path)) {
+        // Generating ASI failed. Let's quit out and stream the error
+        emit operationResult(false, (int)GenerateASIFail);
+        QCoreApplication::instance()->quit();
+        return;
+    }
+
+    // Check it: do we need to generate asi.cer?
+    if (generate) {
+        QString cmd = QString("openssl pkcs12 -cacerts -in %1 -out %2/asi.cer -passin pass:%3 -passout pass:%3")
+                             .arg(p12).arg(path).arg(p12Pass);
+        if (QProcess::execute(cmd) != 0) {
+            // Generating ASI failed. Let's quit out and stream the error
+            emit operationResult(false, (int)GenerateASIFail);
+            QCoreApplication::instance()->quit();
+            return;
+        }
+    } else {
+        // Otherwise, copy over the given asi file
+        if (!QFile::copy(asi, path)) {
+            // Generating ASI failed. Let's quit out and stream the error
+            emit operationResult(false, (int)GenerateASIFail);
+            QCoreApplication::instance()->quit();
+            return;
+        }
+    }
+
+    // Ok, let's generate the real configuration file now
+    QString conf = QString("name = Polimi-internet\n"
+                           "author = Sante Gennaro Rotondi - Dario Freddi\n"
+                           "version = 2\n"
+                           "require password *Password_del_certificato\n"
+                           "----\n"
+                           "ctrl_interface=/var/run/wpa_supplicant\n"
+                           "ctrl_interface_group=0\n"
+                           "network={\n"
+                           "ssid=\"internet\"\n"
+                           "proto=WPA\n"
+                           "key_mgmt=WPA-EAP\n"
+                           "auth_alg=OPEN\n"
+                           "pairwise=TKIP\n"
+                           "eap=TLS\n"
+                           "anonymous_identity=\"S%1\"\n"
+                           "ca_cert=\"%2/asi.cer\"\n"
+                           "private_key=\"%2/CertificatoASI.p12\"\n"
+                           "private_key_passwd=\"%3\"\n"
+                           "phase2=\"auth=MSCHAPV2\"\n"
+                           "}\n").arg(matricola).arg(path).arg(p12Pass);
 }
