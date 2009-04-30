@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.6.0)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
-set(QT_MIN_VERSION "4.4.0")
+set(QT_MIN_VERSION "4.5.0")
 
 include(FindQt4)
 include(FindPolkitQt)

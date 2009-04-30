@@ -124,4 +124,47 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
                            "private_key_passwd=\"%3\"\n"
                            "phase2=\"auth=MSCHAPV2\"\n"
                            "}\n").arg(matricola).arg(path).arg(p12Pass);
+
+    // Ok, now let's save it
+    QFile::remove("/etc/wicd/encryption/templates/polimi-internet");
+    QFile tmpl("/etc/wicd/encryption/templates/polimi-internet");
+    if (!tmpl.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        // Generating ASI failed. Let's quit out and stream the error
+        emit operationResult(false, (int)GenerateASIFail);
+        QCoreApplication::instance()->quit();
+        return;
+    }
+
+    QTextStream tmplout(&tmpl);
+    tmplout << conf;
+    tmplout.flush();
+    tmpl.close();
+
+    QFile active("/etc/wicd/encryption/templates/active");
+    if (!active.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        // Generating ASI failed. Let's quit out and stream the error
+        emit operationResult(false, (int)GenerateASIFail);
+        QCoreApplication::instance()->quit();
+        return;
+    }
+
+    if (!active.readAll().contains("polimi-internet")) {
+        active.close();
+        if (!active.open(QIODevice::Append | QIODevice::Text)) {
+            // Generating ASI failed. Let's quit out and stream the error
+            emit operationResult(false, (int)GenerateASIFail);
+            QCoreApplication::instance()->quit();
+            return;
+        }
+        QTextStream acout(&active);
+        acout << "polimi-internet\n";
+        acout.flush();
+    }
+
+    active.close();
+
+    // That's it!
+    emit operationResult(true);
+    QCoreApplication::instance()->quit();
+
 }
