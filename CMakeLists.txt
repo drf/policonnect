@@ -1,9 +1,12 @@
+project(policonnect)
+
 cmake_minimum_required(VERSION 2.6.0)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 set(QT_MIN_VERSION "4.4.0")
 
+include(FindQt4)
 include(FindPolkitQt)
 include(InstallSettings)
 
@@ -17,7 +20,8 @@ include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
       ${POLKITQT_INCLUDE_DIR}
       ${CMAKE_CURRENT_SOURCE_DIR}
-      ${CMAKE_CURRENT_SOURCE_DIR}/includes
+      ${CMAKE_SOURCE_DIR}
+      ${CMAKE_BINARY_DIR}
       ${QT_INCLUDES}
 )
 
@@ -26,12 +30,11 @@ set(policonnect_SRCS
     mainwindow.cpp
 )
 
-set(policonnect_UI_H
+qt4_wrap_ui(policonnect_UIS
     mainwindow.ui
 )
 
-qt4_wrap_ui(policonnect_UI_H ${policonnect_UI})
-automoc4_add_executable(policonnect ${policonnect_SRCS} ${policonnect_UI})
+automoc4_add_executable(policonnect ${policonnect_SRCS} ${policonnect_UIS})
 
 target_link_libraries(policonnect
     ${QT_QTCORE_LIBRARY}

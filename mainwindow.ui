@@ -199,6 +199,13 @@ p, li { white-space: pre-wrap; }
         </property>
        </spacer>
       </item>
+      <item>
+       <widget class="QPushButton" name="generateButton">
+        <property name="text">
+         <string>Genera Configurazione</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>

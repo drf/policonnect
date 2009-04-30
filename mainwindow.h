@@ -8,6 +8,11 @@ namespace Ui
     class MainWindow;
 }
 
+namespace PolkitQt
+{
+    class ActionButton;
+}
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -22,6 +27,7 @@ private Q_SLOTS:
 
 private:
     Ui::MainWindow *ui;
+    PolkitQt::ActionButton *m_actionButton;
 };
 
 #endif // MAINWINDOW_H
