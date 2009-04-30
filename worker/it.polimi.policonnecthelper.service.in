@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=it.polimi.policonnectworker
+Exec=@LIBEXEC_INSTALL_DIR@/policonnect-worker
+User=root
+

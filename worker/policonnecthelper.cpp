@@ -18,38 +18,40 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "policonnecthelper.h"
 
-#include <QtGui/QMainWindow>
+#include "policonnecthelperadaptor.h"
 
-namespace Ui
+#include <QCoreApplication>
+#include <QDebug>
+#include <QTimer>
+
+PoliconnectHelper::PoliconnectHelper(QObject *parent)
+        : QObject(parent)
 {
-    class MainWindow;
+    qDebug() << "Creating Helper";
+    (void) new PoliconnecthelperAdaptor(this);
+    if (!QDBusConnection::systemBus().registerService("it.polimi.policonnecthelper")) {
+        qDebug() << "another helper is already running";
+        QTimer::singleShot(0, this, SLOT(quit()));
+        return;
+    }
+
+    if (!QDBusConnection::systemBus().registerObject("/Helper", this)) {
+        qDebug() << "unable to register service interface to dbus";
+        QTimer::singleShot(0, this, SLOT(quit()));
+        return;
+    }
+    // Normally you will set a timeout so your application can
+    // free some resources of the poor client machine ;)
+    QTimer::singleShot(60000, QCoreApplication::instance(), SLOT(quit()));
 }
 
-namespace PolkitQt
+PoliconnectHelper::~PoliconnectHelper()
 {
-    class ActionButton;
 }
 
-class MainWindow : public QMainWindow
+void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate, const QString &p12Pass,
+                                              const QString &asi, int matricola, const QString &password)
 {
-    Q_OBJECT
-
-public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-
-private Q_SLOTS:
-    void browseForAsi();
-    void browseForP12();
-    void generateConfiguration();
-    void checkFields();
-
-private:
-    Ui::MainWindow *ui;
-    PolkitQt::ActionButton *m_actionButton;
-};
-
-#endif // MAINWINDOW_H
+}

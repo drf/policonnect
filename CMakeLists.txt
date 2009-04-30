@@ -15,7 +15,6 @@ find_package(Automoc4 REQUIRED)
 set(POLKITQT_MIN_VERSION 0.9.2)
 find_package(PolkitQt REQUIRED)
 
-
 include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
       ${POLKITQT_INCLUDE_DIR}
@@ -24,6 +23,8 @@ include_directories(
       ${CMAKE_BINARY_DIR}
       ${QT_INCLUDES}
 )
+
+add_subdirectory(worker)
 
 set(policonnect_SRCS
     main.cpp

@@ -18,38 +18,23 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef POLICONNECTHELPER_H
+#define POLICONNECTHELPER_H
 
-#include <QtGui/QMainWindow>
+#include <QObject>
+#include <QtDBus/QDBusContext>
 
-namespace Ui
-{
-    class MainWindow;
-}
-
-namespace PolkitQt
-{
-    class ActionButton;
-}
-
-class MainWindow : public QMainWindow
+class PoliconnectHelper : public QObject, protected QDBusContext
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    PoliconnectHelper(QObject *parent = 0);
+    virtual ~PoliconnectHelper();
 
-private Q_SLOTS:
-    void browseForAsi();
-    void browseForP12();
-    void generateConfiguration();
-    void checkFields();
-
-private:
-    Ui::MainWindow *ui;
-    PolkitQt::ActionButton *m_actionButton;
+public Q_SLOTS:
+    void generateConfiguration(const QString &p12, bool generate, const QString &p12Pass,
+                               const QString &asi, int matricola, const QString &password);
 };
 
-#endif // MAINWINDOW_H
+#endif // POLICONNECTHELPER_H

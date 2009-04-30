@@ -18,38 +18,15 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include <QCoreApplication>
 
-#include <QtGui/QMainWindow>
+#include "policonnecthelper.h"
 
-namespace Ui
+int main(int argc, char *argv[])
 {
-    class MainWindow;
+    QCoreApplication app(argc, argv);
+
+    PoliconnectHelper *h = new PoliconnectHelper();
+
+    app.exec();
 }
-
-namespace PolkitQt
-{
-    class ActionButton;
-}
-
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
-
-public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-
-private Q_SLOTS:
-    void browseForAsi();
-    void browseForP12();
-    void generateConfiguration();
-    void checkFields();
-
-private:
-    Ui::MainWindow *ui;
-    PolkitQt::ActionButton *m_actionButton;
-};
-
-#endif // MAINWINDOW_H
