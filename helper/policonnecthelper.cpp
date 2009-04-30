@@ -22,6 +22,8 @@
 
 #include "policonnecthelperadaptor.h"
 
+#include <PolicyKit/polkit-qt/Auth>
+
 #include <QCoreApplication>
 #include <QDebug>
 #include <QTimer>
@@ -54,4 +56,13 @@ PoliconnectHelper::~PoliconnectHelper()
 void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate, const QString &p12Pass,
                                               const QString &asi, int matricola, const QString &password)
 {
+    PolkitQt::Auth::Result result;
+    result = PolkitQt::Auth::isCallerAuthorized("it.polimi.policonnect.GenerateConfiguration",
+                                                message().service(),
+                                                true);
+    if (result != PolkitQt::Auth::Yes) {
+        // We were not authorized. Let's quit out and stream the error
+        QCoreApplication::instance()->quit();
+        return;
+    }
 }

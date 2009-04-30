@@ -24,7 +24,7 @@ include_directories(
       ${QT_INCLUDES}
 )
 
-add_subdirectory(worker)
+add_subdirectory(helper)
 
 set(policonnect_SRCS
     main.cpp
