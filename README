@@ -1,0 +1,26 @@
+Policonnect è un'applicazione Qt per generare template di configurazione per Wicd
+per connettersi alla rete "internet" del Politecnico di Milano. Caratteristiche salienti:
+
+ * Avvio dalla GUI da utente standard e utilizzo di PolicyKit per le azioni privilegiate
+ * Generazione di template per-matricola: sullo stesso pc si possono generare template per
+   un numero indefinito di matricole senza conflitti
+ * Richiesta della password del certificato direttamente da Wicd senza inserirla nel template
+ * Generazione di asi.cer o possibilità di utilizzarne uno già esistente
+
+Dipendenze a runtime:
+ * Qt (QtCore, QtGui, QtDBus)
+ * Polkit-qt
+
+Dipendenze di compilazione:
+ * cmake
+ * Automoc4
+
+Compilazione e installazione:
+
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=<prefisso di installazione (solitamente /usr)>
+make
+make install (da root)
+
+Parte del programma è basato sullo script di generazione template su http://www.poul.org/
