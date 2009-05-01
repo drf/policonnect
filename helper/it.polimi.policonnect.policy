@@ -6,7 +6,7 @@
 <policyconfig>
   <vendor>Politecnico di Milano</vendor>
   <vendor_url>http://www.polimi.it/</vendor_url>
-  <icon_name>dialog-ok-apply</icon_name>
+  <icon_name>polimi-64</icon_name>
 
   <action id="it.polimi.policonnect.generateconfiguration">
     <description>Genera Configurazione per Wicd</description>
