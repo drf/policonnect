@@ -25,6 +25,7 @@ include_directories(
 )
 
 add_subdirectory(helper)
+add_subdirectory(icons)
 
 CONFIGURE_FILE(
        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/cmake_uninstall.cmake.in"
@@ -53,5 +54,6 @@ target_link_libraries(policonnect
     ${POLKITQT_LIBRARIES}
 )
 
-install(TARGETS policonnect DESTINATION ${BIN_INSTALL_DIR} )
+install(TARGETS policonnect         DESTINATION ${BIN_INSTALL_DIR}      )
+install(FILES   policonnect.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 

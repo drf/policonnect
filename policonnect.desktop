@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Policonnect
+Name[it]=Policonnect
+Name[x-test]=xxPoliconnectxx
+Exec=policonnect
+Icon=polimi-64
+Type=Application
+Categories=Qt;System;
+GenericName=Template generator for Wicd for polimi connection
+GenericName[it]=Generatore di template per Wicd per la connessione del Poli
+Terminal=false
