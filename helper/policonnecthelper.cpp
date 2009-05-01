@@ -77,23 +77,20 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
     // Let's start by creating our /usr/share/policonnect dir
     QDir().mkpath(path);
 
-    qDebug() << p12 << path + "/CertificatoASI.p12";
-    QFile::remove(path + "/CertificatoASI.p12");
+    QFile::remove(path + QString("/CertificatoASI%1.p12").arg(matricola));
 
     // Now copy over the certificate
-    if (!QFile::copy(p12, path + "/CertificatoASI.p12")) {
+    if (!QFile::copy(p12, path + QString("/CertificatoASI%1.p12").arg(matricola))) {
         // Generating ASI failed. Let's quit out and stream the error
         emit operationResult(false, (int)FileCopyFail);
         QCoreApplication::instance()->quit();
         return;
     }
 
-    qDebug() << generate;
-
     // Check it: do we need to generate asi.cer?
     if (generate) {
-        QString cmd = QString("openssl pkcs12 -cacerts -in %1 -out %2/asi.cer -passin pass:%3 -passout pass:%3")
-                             .arg(p12).arg(path).arg(p12Pass);
+        QString cmd = QString("openssl pkcs12 -cacerts -in %1 -out %2/asi%3.cer -passin pass:%4 -passout pass:%4")
+                             .arg(p12).arg(path).arg(matricola).arg(p12Pass);
         if (QProcess::execute(cmd) != 0) {
             // Generating ASI failed. Let's quit out and stream the error
             emit operationResult(false, (int)GenerateASIFail);
@@ -102,7 +99,7 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
         }
     } else {
         // Otherwise, copy over the given asi file
-        if (!QFile::copy(asi, path + "/asi.cer")) {
+        if (!QFile::copy(asi, path + QString("/asi%1.cer").arg(matricola))) {
             // Generating ASI failed. Let's quit out and stream the error
             emit operationResult(false, (int)FileCopyFail);
             QCoreApplication::instance()->quit();
@@ -111,9 +108,9 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
     }
 
     // Ok, let's generate the real configuration file now
-    QString conf = QString("name = Polimi-internet\n"
-                           "author = Sante Gennaro Rotondi - Dario Freddi\n"
-                           "version = 2\n"
+    QString conf = QString("name = Polimi-internet-%1\n"
+                           "author = Dario Freddi\n"
+                           "version = 1\n"
                            "require password *Password_del_certificato\n"
                            "----\n"
                            "ctrl_interface=/var/run/wpa_supplicant\n"
@@ -126,15 +123,15 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
                            "pairwise=TKIP\n"
                            "eap=TLS\n"
                            "anonymous_identity=\"S%1\"\n"
-                           "ca_cert=\"%2/asi.cer\"\n"
-                           "private_key=\"%2/CertificatoASI.p12\"\n"
-                           "private_key_passwd=\"%3\"\n"
+                           "ca_cert=\"%2/asi%1.cer\"\n"
+                           "private_key=\"%2/CertificatoASI%1.p12\"\n"
+                           "private_key_passwd=\"$_PASSWORD\"\n"
                            "phase2=\"auth=MSCHAPV2\"\n"
-                           "}\n").arg(matricola).arg(path).arg(p12Pass);
+                           "}\n").arg(matricola).arg(path);
 
     // Ok, now let's save it
-    QFile::remove("/etc/wicd/encryption/templates/polimi-internet");
-    QFile tmpl("/etc/wicd/encryption/templates/polimi-internet");
+    QFile::remove(QString("/etc/wicd/encryption/templates/polimi-internet-%1").arg(matricola));
+    QFile tmpl(QString("/etc/wicd/encryption/templates/polimi-internet-%1").arg(matricola));
     if (!tmpl.open(QIODevice::WriteOnly | QIODevice::Text)) {
         // Generating ASI failed. Let's quit out and stream the error
         emit operationResult(false, (int)GenerateTemplateFail);
@@ -155,7 +152,7 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
         return;
     }
 
-    if (!active.readAll().contains("polimi-internet")) {
+    if (!QString(active.readAll()).contains(QString("polimi-internet-%1").arg(matricola))) {
         active.close();
         if (!active.open(QIODevice::Append | QIODevice::Text)) {
             // Generating ASI failed. Let's quit out and stream the error
@@ -164,7 +161,7 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
             return;
         }
         QTextStream acout(&active);
-        acout << "polimi-internet\n";
+        acout << QString("polimi-internet-%1").arg(matricola) << "\n";
         acout.flush();
     }
 

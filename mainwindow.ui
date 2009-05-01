@@ -254,5 +254,37 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>generateAsiRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_5</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>57</x>
+     <y>156</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>55</x>
+     <y>237</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>generateAsiRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>p12PasswordEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>57</x>
+     <y>156</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>184</x>
+     <y>240</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>

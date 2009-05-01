@@ -41,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_actionButton->setText("Genera Configurazione");
     m_actionButton->setEnabled(true);
     m_actionButton->setAuthIcon(QIcon(":/Icons/icons/document-encrypt.png"));
+    m_actionButton->setYesIcon(QIcon(":/Icons/icons/dialog-ok-apply.png"));
+    m_actionButton->setNoIcon(QIcon(":/Icons/icons/dialog-cancel.png"));
 
     ui->browseAsiButton->setIcon(QIcon(":/Icons/icons/document-open.png"));
     ui->p12BrowseButton->setIcon(QIcon(":/Icons/icons/document-open.png"));
@@ -136,15 +138,17 @@ void MainWindow::operationResult(bool success, int err)
         ok->setDefault(true);
         connect(ok, SIGNAL(clicked()), d, SLOT(accept()));
         hb->addWidget(ok);
-        QLabel *l = new QLabel("Congratulazioni! Il template è stato generato con successo."
-                               "Da ora potrai connetterti seguendo queste istruzioni:\n\n"
+        QString text = QString::fromUtf8("Congratulazioni! Il template è stato generato con successo. "
+                               "Da ora potrai connetterti seguendo queste istruzioni:<br><br>"
                                "Apri il client di Wicd, e clicca la freccia verso il basso situata in alto "
-                               "a sinistra, e seleziona Hidden Network.\n\n"
-                               "Inserisci il testo \"internet\" senza apici nella finestra di richiesta.\n"
-                               "Clicca il triangolo bianco a sinistra della rete internet, poi \"Impostazioni avanzate\".\n\n"
+                               "a sinistra, e seleziona Hidden Network.<br><br>"
+                               "Inserisci il testo \"internet\" senza apici nella finestra di richiesta.<br>"
+                               "Clicca il triangolo bianco a sinistra della rete internet, poi \"Impostazioni avanzate\".<br><br>"
                                "Seleziona la casella di \"Utilizza cifratura\" e nel menu sotto di essa "
-                               "seleziona \"<b>polimi-internet</b>\".\n\n"
-                               "Nel campo \"Password del certificato\" inserisci la password.\n");
+                               "seleziona \"<b>polimi-internet-%1</b>\".<br><br>"
+                               "Nel campo \"Password del certificato\" inserisci la password.<br>").arg(ui->matricolaEdit->text());
+        QLabel *l = new QLabel(text);
+        l->setTextFormat(Qt::RichText);
         l->setScaledContents(true);
         l->setWordWrap(true);
         vb->addWidget(l);
