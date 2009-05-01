@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/Icons" >
+        <file>icons/dialog-cancel.png</file>
+        <file>icons/dialog-ok-apply.png</file>
+        <file>icons/document-encrypt.png</file>
+        <file>icons/document-open.png</file>
+    </qresource>
+</RCC>
