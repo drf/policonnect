@@ -38,13 +38,13 @@ PoliconnectHelper::PoliconnectHelper(QObject *parent)
     (void) new PoliconnecthelperAdaptor(this);
     if (!QDBusConnection::systemBus().registerService("it.polimi.policonnecthelper")) {
         qDebug() << "another helper is already running";
-        QTimer::singleShot(0, this, SLOT(quit()));
+        QTimer::singleShot(0, QCoreApplication::instance(), SLOT(quit()));
         return;
     }
 
     if (!QDBusConnection::systemBus().registerObject("/Helper", this)) {
         qDebug() << "unable to register service interface to dbus";
-        QTimer::singleShot(0, this, SLOT(quit()));
+        QTimer::singleShot(0, QCoreApplication::instance(), SLOT(quit()));
         return;
     }
 

@@ -30,5 +30,5 @@ install(TARGETS policonnect-helper DESTINATION ${LIBEXEC_INSTALL_DIR})
 
 dbus_add_activation_system_service(it.polimi.policonnecthelper.service.in)
 
-install(FILES it.polimi.policonnecthelper.conf DESTINATION ${SYSCONF_INSTALL_DIR}/dbus-1/system.d)
+install(FILES it.polimi.policonnecthelper.conf DESTINATION /etc/dbus-1/system.d)
 install(FILES it.polimi.policonnect.policy DESTINATION ${POLICY_FILES_INSTALL_DIR}) 

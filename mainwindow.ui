@@ -66,8 +66,14 @@ p, li { white-space: pre-wrap; }
         </item>
         <item>
          <widget class="QPushButton" name="p12BrowseButton">
+          <property name="maximumSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
           <property name="text">
-           <string>PushButton</string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -107,8 +113,14 @@ p, li { white-space: pre-wrap; }
           <property name="enabled">
            <bool>false</bool>
           </property>
+          <property name="maximumSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
           <property name="text">
-           <string>PushButton</string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -210,38 +222,6 @@ p, li { white-space: pre-wrap; }
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections>
-  <connection>
-   <sender>generateAsiRadio</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_5</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>89</x>
-     <y>150</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>194</x>
-     <y>152</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>generateAsiRadio</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>p12PasswordEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>89</x>
-     <y>150</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>354</x>
-     <y>152</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>locateAsiRadio</sender>
    <signal>toggled(bool)</signal>

@@ -41,11 +41,15 @@ MainWindow::MainWindow(QWidget *parent)
     m_actionButton->setText("Genera Configurazione");
     m_actionButton->setEnabled(true);
     m_actionButton->setAuthIcon(QIcon(":/Icons/icons/document-encrypt.png"));
+
+    ui->browseAsiButton->setIcon(QIcon(":/Icons/icons/document-open.png"));
+    ui->p12BrowseButton->setIcon(QIcon(":/Icons/icons/document-open.png"));
+
     connect(m_actionButton, SIGNAL(clicked(QAbstractButton*)), this, SLOT(checkFields()));
     connect(m_actionButton, SIGNAL(activated()), this, SLOT(generateConfiguration()));
 
     connect(ui->browseAsiButton, SIGNAL(clicked()), this, SLOT(browseForAsi()));
-    connect(ui->browseAsiButton, SIGNAL(clicked()), this, SLOT(browseForP12()));
+    connect(ui->p12BrowseButton, SIGNAL(clicked()), this, SLOT(browseForP12()));
 }
 
 MainWindow::~MainWindow()
