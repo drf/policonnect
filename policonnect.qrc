@@ -4,5 +4,6 @@
         <file>icons/dialog-ok-apply.png</file>
         <file>icons/document-encrypt.png</file>
         <file>icons/document-open.png</file>
+        <file>icons/polimi.png</file>
     </qresource>
 </RCC>

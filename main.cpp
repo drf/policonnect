@@ -24,6 +24,13 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    QCoreApplication::setApplicationName("Policonnect");
+    QCoreApplication::setApplicationVersion("0.1.0");
+    QCoreApplication::setOrganizationDomain("www.asi.polimi.it");
+    QCoreApplication::setOrganizationName("Area sistemi informatici Politecnico di Milano");
+    QApplication::setWindowIcon(QIcon(":/Icons/icons/polimi.png"));
+
     MainWindow w;
     w.show();
     return a.exec();
