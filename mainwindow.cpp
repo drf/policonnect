@@ -28,7 +28,6 @@
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
 #include <QtDBus/QDBusConnection>
-#include <QtDBus/QDBusInterface>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
