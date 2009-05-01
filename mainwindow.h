@@ -22,6 +22,7 @@
 #define MAINWINDOW_H
 
 #include <QtGui/QMainWindow>
+#include <QPointer>
 
 namespace Ui
 {
@@ -32,6 +33,8 @@ namespace PolkitQt
 {
     class ActionButton;
 }
+
+class QProgressDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -46,10 +49,12 @@ private Q_SLOTS:
     void browseForP12();
     void generateConfiguration();
     void checkFields();
+    void operationResult(bool success, int err);
 
 private:
     Ui::MainWindow *ui;
     PolkitQt::ActionButton *m_actionButton;
+    QPointer<QProgressDialog> m_progressDialog;
 };
 
 #endif // MAINWINDOW_H

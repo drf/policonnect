@@ -47,8 +47,7 @@ PoliconnectHelper::PoliconnectHelper(QObject *parent)
         QTimer::singleShot(0, this, SLOT(quit()));
         return;
     }
-    // Normally you will set a timeout so your application can
-    // free some resources of the poor client machine ;)
+
     QTimer::singleShot(60000, QCoreApplication::instance(), SLOT(quit()));
 }
 

@@ -23,6 +23,7 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QProgressDialog>
 #include <PolicyKit/polkit-qt/ActionButton>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
@@ -95,9 +96,58 @@ void MainWindow::generateConfiguration()
 {
     // Stream it through the bus
     QDBusInterface iface("it.polimi.policonnectworker",
-                         "/Worker",
+                         "/Helper",
                          "it.polimi.policonnectworker",
                          QDBusConnection::systemBus());
+
+    m_progressDialog = new QProgressDialog(this);
+    m_progressDialog->setRange(0, 0);
+    m_progressDialog->setCancelButton(0);
+    m_progressDialog->setModal(true);
+    m_progressDialog->setLabelText("Attendi, generazione in corso...");
+    m_progressDialog->show();
+
+    QDBusConnection::systemBus().connect("it.polimi.policonnectworker",
+                                         "/Helper",
+                                         "it.polimi.policonnectworker",
+                                         "operationResult",
+                                         this,
+                                         SLOT(operationResult(bool,int)));
+
     iface.asyncCall("generateConfiguration", ui->p12LocateEdit->text(), ui->locateAsiRadio->isChecked(),
                     ui->p12PasswordEdit->text(), ui->locateAsiEdit->text(), ui->matricolaEdit->text());
+}
+
+void MainWindow::operationResult(bool success, int err)
+{
+    m_progressDialog->deleteLater();
+    if (success) {
+        QDialog *d = new QDialog(this);
+        d->setModal(true);
+        QVBoxLayout *vb = new QVBoxLayout();
+        QHBoxLayout *hb = new QHBoxLayout();
+        hb->addStretch();
+        QPushButton *ok = new QPushButton("Chiudi");
+        ok->setDefault(true);
+        connect(ok, SIGNAL(clicked()), d, SLOT(accept()));
+        hb->addWidget(ok);
+        QLabel *l = new QLabel("Congratulazioni! Il template è stato generato con successo."
+                               "Da ora potrai connetterti seguendo queste istruzioni:\n\n"
+                               "Apri il client di Wicd, e clicca la freccia verso il basso situata in alto "
+                               "a sinistra, e seleziona Hidden Network.\n\n"
+                               "Inserisci il testo \"internet\" senza apici nella finestra di richiesta.\n"
+                               "Clicca il triangolo bianco a sinistra della rete internet, poi \"Impostazioni avanzate\".\n\n"
+                               "Seleziona la casella di \"Utilizza cifratura\" e nel menu sotto di essa "
+                               "seleziona \"<b>polimi-internet</b>\".\n\n"
+                               "Nel campo \"Password del certificato\" inserisci la password.\n");
+        l->setScaledContents(true);
+        l->setWordWrap(true);
+        vb->addWidget(l);
+        vb->addLayout(hb);
+        d->setLayout(vb);
+        d->exec();
+        QCoreApplication::instance()->quit();
+    } else {
+        QMessageBox::warning("Errore!");
+    }
 }
