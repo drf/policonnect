@@ -37,9 +37,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     // Create the button for polkitqt
-    m_actionButton = new PolkitQt::ActionButton(ui->generateButton, "it.polimi.policonnect.GenerateConfiguration", this);
+    m_actionButton = new PolkitQt::ActionButton(ui->generateButton, "it.polimi.policonnect.generateconfiguration", this);
     m_actionButton->setText("Genera Configurazione");
     m_actionButton->setEnabled(true);
+    m_actionButton->setAuthIcon(QIcon(":/Icons/icons/document-encrypt.png"));
     connect(m_actionButton, SIGNAL(clicked(QAbstractButton*)), this, SLOT(checkFields()));
     connect(m_actionButton, SIGNAL(activated()), this, SLOT(generateConfiguration()));
 

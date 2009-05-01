@@ -59,7 +59,7 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
                                               const QString &asi, int matricola)
 {
     PolkitQt::Auth::Result result;
-    result = PolkitQt::Auth::isCallerAuthorized("it.polimi.policonnect.GenerateConfiguration",
+    result = PolkitQt::Auth::isCallerAuthorized("it.polimi.policonnect.generateconfiguration",
                                                 message().service(),
                                                 true);
     if (result != PolkitQt::Auth::Yes) {

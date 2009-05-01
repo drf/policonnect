@@ -41,7 +41,11 @@ qt4_wrap_ui(policonnect_UIS
     mainwindow.ui
 )
 
-automoc4_add_executable(policonnect ${policonnect_SRCS} ${policonnect_UIS})
+qt4_add_resources(qtsourceview_RC_SRCS
+    policonnect.qrc
+)
+
+automoc4_add_executable(policonnect ${policonnect_SRCS} ${policonnect_UIS} ${qtsourceview_RC_SRCS})
 
 target_link_libraries(policonnect
     ${QT_QTCORE_LIBRARY}
