@@ -148,6 +148,6 @@ void MainWindow::operationResult(bool success, int err)
         d->exec();
         QCoreApplication::instance()->quit();
     } else {
-        QMessageBox::warning("Errore!");
+        QMessageBox::warning(this, "Errore!", "Errore!");
     }
 }
