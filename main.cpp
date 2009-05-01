@@ -19,6 +19,8 @@
  ***************************************************************************/
 
 #include <QtGui/QApplication>
+#include <QProcess>
+#include <QMessageBox>
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
@@ -30,6 +32,22 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("www.asi.polimi.it");
     QCoreApplication::setOrganizationName("Area sistemi informatici Politecnico di Milano");
     QApplication::setWindowIcon(QIcon(":/Icons/icons/polimi.png"));
+
+    // Startup checks...
+    if (QProcess::execute("which wicd") != 0 && QProcess::execute("which wicd-client") != 0) {
+        QMessageBox::warning(0, "Errore", QString::fromUtf8("Sembra che tu non abbia installato wicd. "
+                                          "Policonnect è un'applicazione che genera template di connessione "
+                                          "per wicd, di conseguenza è necessario installarlo per poter "
+                                          "utilizzare Policonnect. Installa wicd e riavvia questa applicazione"));
+        QCoreApplication::exit(1);
+    }
+
+    if (QProcess::execute("which openssl") != 0) {
+        QMessageBox::warning(0, "Errore", QString::fromUtf8("Sembra che tu non abbia installato openssl. "
+                                          "Openssl è necessario per generare il tuo certificato. "
+                                          "Se possiedi già un file asi.cer, puoi ignorare questo messaggio, "
+                                          "in caso contrario, installa openssl e riavvia Policonnect."));
+    }
 
     MainWindow w;
     w.show();

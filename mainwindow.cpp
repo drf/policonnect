@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     ui->logoLabel->setPixmap(QIcon(":/Icons/icons/polimi.png").pixmap(96, 96));
+    ui->closeButton->setIcon(QIcon(":/Icons/icons/application-exit.png"));
+    connect(ui->closeButton, SIGNAL(clicked()), QCoreApplication::instance(), SLOT(quit()));
 
     // Create the button for polkitqt
     m_actionButton = new PolkitQt::ActionButton(ui->generateButton, "it.polimi.policonnect.generateconfiguration", this);
