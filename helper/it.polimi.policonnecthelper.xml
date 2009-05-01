@@ -8,5 +8,10 @@
 	   <arg direction="in" type="s" name="asilocate" />
 	   <arg direction="in" type="i" name="matricola" />
        </method>
+       
+       <signal name="operationResult">
+           <arg direction="out" type="b" name="success" />
+	   <arg direction="out" type="i" name="err" />
+       </signal>
    </interface>
 </node>

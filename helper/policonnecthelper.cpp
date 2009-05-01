@@ -58,12 +58,15 @@ PoliconnectHelper::~PoliconnectHelper()
 void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate, const QString &p12Pass,
                                               const QString &asi, int matricola)
 {
+    qDebug() << "Generating conf";
+
     PolkitQt::Auth::Result result;
     result = PolkitQt::Auth::isCallerAuthorized("it.polimi.policonnect.generateconfiguration",
                                                 message().service(),
                                                 true);
     if (result != PolkitQt::Auth::Yes) {
         // We were not authorized. Let's quit out and stream the error
+        qDebug() << "No auth";
         emit operationResult(false, (int)NotAuthorized);
         QCoreApplication::instance()->quit();
         return;
@@ -74,13 +77,18 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
     // Let's start by creating our /usr/share/policonnect dir
     QDir().mkpath(path);
 
+    qDebug() << p12 << path + "/CertificatoASI.p12";
+    QFile::remove(path + "/CertificatoASI.p12");
+
     // Now copy over the certificate
-    if (!QFile::copy(p12, path)) {
+    if (!QFile::copy(p12, path + "/CertificatoASI.p12")) {
         // Generating ASI failed. Let's quit out and stream the error
-        emit operationResult(false, (int)GenerateASIFail);
+        emit operationResult(false, (int)FileCopyFail);
         QCoreApplication::instance()->quit();
         return;
     }
+
+    qDebug() << generate;
 
     // Check it: do we need to generate asi.cer?
     if (generate) {
@@ -94,9 +102,9 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
         }
     } else {
         // Otherwise, copy over the given asi file
-        if (!QFile::copy(asi, path)) {
+        if (!QFile::copy(asi, path + "/asi.cer")) {
             // Generating ASI failed. Let's quit out and stream the error
-            emit operationResult(false, (int)GenerateASIFail);
+            emit operationResult(false, (int)FileCopyFail);
             QCoreApplication::instance()->quit();
             return;
         }
@@ -129,7 +137,7 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
     QFile tmpl("/etc/wicd/encryption/templates/polimi-internet");
     if (!tmpl.open(QIODevice::WriteOnly | QIODevice::Text)) {
         // Generating ASI failed. Let's quit out and stream the error
-        emit operationResult(false, (int)GenerateASIFail);
+        emit operationResult(false, (int)GenerateTemplateFail);
         QCoreApplication::instance()->quit();
         return;
     }
@@ -142,7 +150,7 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
     QFile active("/etc/wicd/encryption/templates/active");
     if (!active.open(QIODevice::ReadOnly | QIODevice::Text)) {
         // Generating ASI failed. Let's quit out and stream the error
-        emit operationResult(false, (int)GenerateASIFail);
+        emit operationResult(false, (int)ModifyActiveFail);
         QCoreApplication::instance()->quit();
         return;
     }
@@ -151,7 +159,7 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
         active.close();
         if (!active.open(QIODevice::Append | QIODevice::Text)) {
             // Generating ASI failed. Let's quit out and stream the error
-            emit operationResult(false, (int)GenerateASIFail);
+            emit operationResult(false, (int)ModifyActiveFail);
             QCoreApplication::instance()->quit();
             return;
         }

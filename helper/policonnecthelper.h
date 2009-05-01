@@ -33,7 +33,10 @@ public:
     enum Error {
         NoError = 0,
         NotAuthorized = 1,
-        GenerateASIFail = 2
+        GenerateASIFail = 2,
+        FileCopyFail = 4,
+        GenerateTemplateFail = 8,
+        ModifyActiveFail = 16
     };
 
     PoliconnectHelper(QObject *parent = 0);

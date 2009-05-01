@@ -100,9 +100,9 @@ void MainWindow::checkFields()
 void MainWindow::generateConfiguration()
 {
     // Stream it through the bus
-    QDBusInterface iface("it.polimi.policonnectworker",
+    QDBusInterface iface("it.polimi.policonnecthelper",
                          "/Helper",
-                         "it.polimi.policonnectworker",
+                         "it.polimi.policonnecthelper",
                          QDBusConnection::systemBus());
 
     m_progressDialog = new QProgressDialog(this);
@@ -112,15 +112,15 @@ void MainWindow::generateConfiguration()
     m_progressDialog->setLabelText("Attendi, generazione in corso...");
     m_progressDialog->show();
 
-    QDBusConnection::systemBus().connect("it.polimi.policonnectworker",
+    QDBusConnection::systemBus().connect("it.polimi.policonnecthelper",
                                          "/Helper",
-                                         "it.polimi.policonnectworker",
+                                         "it.polimi.policonnecthelper",
                                          "operationResult",
                                          this,
                                          SLOT(operationResult(bool,int)));
 
-    iface.asyncCall("generateConfiguration", ui->p12LocateEdit->text(), ui->locateAsiRadio->isChecked(),
-                    ui->p12PasswordEdit->text(), ui->locateAsiEdit->text(), ui->matricolaEdit->text());
+    iface.asyncCall("generateConfiguration", ui->p12LocateEdit->text(), ui->generateAsiRadio->isChecked(),
+                    ui->p12PasswordEdit->text(), ui->locateAsiEdit->text(), ui->matricolaEdit->text().toInt());
 }
 
 void MainWindow::operationResult(bool success, int err)
@@ -153,6 +153,6 @@ void MainWindow::operationResult(bool success, int err)
         d->exec();
         QCoreApplication::instance()->quit();
     } else {
-        QMessageBox::warning(this, "Errore!", "Errore!");
+        QMessageBox::warning(this, "Errore!", QString("Errore %1!").arg(err));
     }
 }
