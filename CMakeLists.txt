@@ -67,3 +67,10 @@ target_link_libraries(policonnect
 install(TARGETS policonnect         DESTINATION ${BIN_INSTALL_DIR}      )
 install(FILES   policonnect.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 
+### Source tarball autogeneration ###
+set(ARCHIVE_NAME ${CMAKE_PROJECT_NAME}-1.0)
+add_custom_target(dist
+    COMMAND git archive --prefix=${ARCHIVE_NAME}/ HEAD
+        | bzip2 > ${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.tar.bz2
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
