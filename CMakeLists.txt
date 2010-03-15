@@ -6,18 +6,28 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 set(QT_MIN_VERSION "4.5.0")
 
-include(FindQt4)
-include(FindPolkitQt)
 include(InstallSettings)
+
+macro(dbus_add_activation_system_service _sources)
+    pkg_search_module( DBUS dbus-1 )
+    foreach (_i ${_sources})
+        get_filename_component(_service_file ${_i} ABSOLUTE)
+        string(REGEX REPLACE "\\.service.*$" ".service" _output_file ${_i})
+        set(_target ${CMAKE_CURRENT_BINARY_DIR}/${_output_file})
+        configure_file(${_service_file} ${_target})
+        install(FILES ${_target} DESTINATION ${DBUS_PREFIX}/share/dbus-1/system-services )
+    endforeach (_i ${ARGN})
+endmacro(dbus_add_activation_system_service _sources)
 
 find_package(Qt4 REQUIRED)
 find_package(Automoc4 REQUIRED)
-set(POLKITQT_MIN_VERSION 0.9.2)
-find_package(PolkitQt REQUIRED)
+find_package(PolkitQt-1 REQUIRED)
+
+message(${POLKITQT-1_INCLUDE_DIR})
 
 include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
-      ${POLKITQT_INCLUDE_DIR}
+      ${POLKITQT-1_INCLUDE_DIR}
       ${CMAKE_CURRENT_SOURCE_DIR}
       ${CMAKE_SOURCE_DIR}
       ${CMAKE_BINARY_DIR}
@@ -51,7 +61,7 @@ automoc4_add_executable(policonnect ${policonnect_SRCS} ${policonnect_UIS} ${qts
 target_link_libraries(policonnect
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
-    ${POLKITQT_LIBRARIES}
+    ${POLKITQT-1_GUI_LIBRARY}
 )
 
 install(TARGETS policonnect         DESTINATION ${BIN_INSTALL_DIR}      )

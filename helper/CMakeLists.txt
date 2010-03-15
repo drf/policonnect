@@ -23,7 +23,7 @@ automoc4_add_executable(policonnect-helper
 target_link_libraries(policonnect-helper
     ${QT_QTCORE_LIBRARY}
     ${QT_DBUS_LIBRARY}
-    polkit-qt-core
+    ${POLKITQT-1_CORE_LIBRARY}
 )
 
 install(TARGETS policonnect-helper DESTINATION ${LIBEXEC_INSTALL_DIR})
@@ -31,4 +31,4 @@ install(TARGETS policonnect-helper DESTINATION ${LIBEXEC_INSTALL_DIR})
 dbus_add_activation_system_service(it.polimi.policonnecthelper.service.in)
 
 install(FILES it.polimi.policonnecthelper.conf DESTINATION /etc/dbus-1/system.d)
-install(FILES it.polimi.policonnect.policy DESTINATION ${POLICY_FILES_INSTALL_DIR}) 
+install(FILES it.polimi.policonnect.policy DESTINATION ${POLKITQT-1_POLICY_FILES_INSTALL_DIR})

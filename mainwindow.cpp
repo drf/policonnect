@@ -24,7 +24,10 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QProgressDialog>
-#include <PolicyKit/polkit-qt/ActionButton>
+#include <QCoreApplication>
+
+#include <PolkitQt1/Gui/ActionButton>
+
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
 #include <QtDBus/QDBusConnection>
@@ -40,18 +43,18 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->closeButton, SIGNAL(clicked()), QCoreApplication::instance(), SLOT(quit()));
 
     // Create the button for polkitqt
-    m_actionButton = new PolkitQt::ActionButton(ui->generateButton, "it.polimi.policonnect.generateconfiguration", this);
+    m_actionButton = new PolkitQt1::Gui::ActionButton(ui->generateButton, "it.polimi.policonnect.generateconfiguration", this);
     m_actionButton->setText("Genera Configurazione");
     m_actionButton->setEnabled(true);
-    m_actionButton->setAuthIcon(QIcon(":/Icons/icons/document-encrypt.png"));
-    m_actionButton->setYesIcon(QIcon(":/Icons/icons/dialog-ok-apply.png"));
-    m_actionButton->setNoIcon(QIcon(":/Icons/icons/dialog-cancel.png"));
+    m_actionButton->setIcon(QIcon(":/Icons/icons/document-encrypt.png"), PolkitQt1::Gui::Action::Auth);
+    m_actionButton->setIcon(QIcon(":/Icons/icons/dialog-ok-apply.png"), PolkitQt1::Gui::Action::Yes);
+    m_actionButton->setIcon(QIcon(":/Icons/icons/dialog-cancel.png"), PolkitQt1::Gui::Action::No);
 
     ui->browseAsiButton->setIcon(QIcon(":/Icons/icons/document-open.png"));
     ui->p12BrowseButton->setIcon(QIcon(":/Icons/icons/document-open.png"));
 
-    connect(m_actionButton, SIGNAL(clicked(QAbstractButton*)), this, SLOT(checkFields()));
-    connect(m_actionButton, SIGNAL(activated()), this, SLOT(generateConfiguration()));
+    connect(m_actionButton, SIGNAL(clicked(QAbstractButton*,bool)), this, SLOT(checkFields()));
+    connect(m_actionButton, SIGNAL(authorized()), this, SLOT(generateConfiguration()));
 
     connect(ui->browseAsiButton, SIGNAL(clicked()), this, SLOT(browseForAsi()));
     connect(ui->p12BrowseButton, SIGNAL(clicked()), this, SLOT(browseForP12()));

@@ -22,7 +22,7 @@
 
 #include "policonnecthelperadaptor.h"
 
-#include <PolicyKit/polkit-qt/Auth>
+#include <PolkitQt1/Authority>
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -60,11 +60,15 @@ void PoliconnectHelper::generateConfiguration(const QString &p12, bool generate,
 {
     qDebug() << "Generating conf";
 
-    PolkitQt::Auth::Result result;
-    result = PolkitQt::Auth::isCallerAuthorized("it.polimi.policonnect.generateconfiguration",
-                                                message().service(),
-                                                true);
-    if (result != PolkitQt::Auth::Yes) {
+    PolkitQt1::Authority::Result result;
+    PolkitQt1::SystemBusNameSubject *subject;
+
+    subject = new PolkitQt1::SystemBusNameSubject(message().service());
+
+    result = PolkitQt1::Authority::instance()->checkAuthorizationSync("it.polimi.policonnect.generateconfiguration",
+                                                                      subject , PolkitQt1::Authority::AllowUserInteraction);
+
+    if (result != PolkitQt1::Authority::Yes) {
         // We were not authorized. Let's quit out and stream the error
         qDebug() << "No auth";
         emit operationResult(false, (int)NotAuthorized);

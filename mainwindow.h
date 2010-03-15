@@ -29,9 +29,11 @@ namespace Ui
     class MainWindow;
 }
 
-namespace PolkitQt
+namespace PolkitQt1
 {
+namespace Gui {
     class ActionButton;
+}
 }
 
 class QProgressDialog;
@@ -63,7 +65,7 @@ private Q_SLOTS:
 
 private:
     Ui::MainWindow *ui;
-    PolkitQt::ActionButton *m_actionButton;
+    PolkitQt1::Gui::ActionButton *m_actionButton;
     QPointer<QProgressDialog> m_progressDialog;
 };
 
